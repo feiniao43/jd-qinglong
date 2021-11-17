@@ -1,9 +1,13 @@
 ### 本教程只适用于老版本升级过来的，需要改动的地方如下：
+* 以防万一，**升级前请务必备份go-cqhttp目录中的ql.db到其他文件夹，go-cqhttp文件夹不要删**
+* 以防万一，**升级前请务必备份go-cqhttp目录中的ql.db到其他文件夹，go-cqhttp文件夹不要删**
+* 以防万一，**升级前请务必备份go-cqhttp目录中的ql.db到其他文件夹，go-cqhttp文件夹不要删**
+    
 1. 镜像版本号升级为1.8 **_注意arm的请把1.8替换为arm_**
 ```
 sudo docker pull rubyangxg/jd-qinglong:1.8
 ```
-2. 机器人新名字adbot(阿东机器人,阿这个字有点像狗)，env.properties必须增加如下设置，不使用adbot，请留空：
+2. 机器人新名字adbot(阿东机器人,阿这个字有点像狗)，env.properties必须增加如下设置：
 ```
 #########adbot管理平台用户名密码，请务必改为自己的#########
 AD_ADMIN_USERNAME=admin
@@ -30,9 +34,14 @@ QL_CHOOSE_TYPE=2
    * 增加了-p 8100:8100，左边的8100可自定义，需要开外网访问，用于网页上登录adbot，登录的用户名密码参见上方AD_ADMIN_USERNAME和AD_ADMIN_PASSWORD。不使用adbot的，无需映射8100端口
    * 挂载env.properties:ro改为env.properties:rw，用于之后做配置热生效。
    * 机器人实现替代~~go-cqhttp~~，统一为adbot，启动命令**_不要挂载go-cqhttp_**, 请仔细甄别。
+   * 如果复制出来的命令\后面有空格，请去掉
 ```
-sudo docker run -d -p 5701:8080 -p 8100:8100 --name=webapp --privileged=true \ 
--v [你的路径]/env.properties:/env.properties:rw \ 
+sudo docker run -d -p 5701:8080 -p 8100:8100 --name=webapp --privileged=true -v [你的路径]/env.properties:/env.properties:rw -v [你的路径]/adbot:/adbot rubyangxg/jd-qinglong:1.8
+```
+或者
+```
+sudo docker run -d -p 5701:8080 -p 8100:8100 --name=webapp --privileged=true \
+-v [你的路径]/env.properties:/env.properties:rw \
 -v [你的路径]/adbot:/adbot \
 rubyangxg/jd-qinglong:1.8
 ```
@@ -44,6 +53,13 @@ sudo docker run -d -p 5701:8080 -p 8100:8100 --name=webapp --privileged=true \
 -v [你的路径]/adbot:/adbot \
 rubyangxg/jd-qinglong:1.8
 ```
+例如：**_注意这是1条命令，全部复制执行，注意\后面不要有空格_**，
+```
+sudo docker run -d -p 5701:8080 -p 8100:8100 --name=webapp --privileged=true \
+-v "$(pwd)"/env.properties:/env.properties:rw \
+-v "$(pwd)"/adbot:/adbot \
+rubyangxg/jd-qinglong:1.8
+``` 
 或者编写docker-compose.yml
 ```
 version: '3.3'
